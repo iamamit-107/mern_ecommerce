@@ -12,7 +12,7 @@ import {
 const Header = () => {
   return (
     <header>
-      <Navbar bg="light" collapseOnSelect expand="lg">
+      <Navbar bg="dark" variant="dark" collapseOnSelect expand="lg">
         <Container>
           <Navbar.Brand href="#home">Proshop</Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
