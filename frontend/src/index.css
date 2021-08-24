@@ -6,3 +6,7 @@ a {
   text-decoration: none;
   color: #444;
 }
+
+.rating i {
+  color: #444;
+}
