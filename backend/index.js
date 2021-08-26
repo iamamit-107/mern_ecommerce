@@ -1,6 +1,7 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const products = require("./products");
+const connectDb = require("./config/db");
 
 const app = express();
 
@@ -16,6 +17,9 @@ app.get("/api/products/:id", (req, res) => {
   const product = products.find((product) => product._id === req.params.id);
   res.json(product);
 });
+
+// database connection
+connectDb();
 
 app.listen(
   process.env.PORT,
