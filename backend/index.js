@@ -3,20 +3,18 @@ const dotenv = require("dotenv");
 const products = require("./products");
 const connectDb = require("./config/db");
 
+// Router import
+const productRoutes = require("./routes/productRoutes");
+
 const app = express();
 
 dotenv.config();
 
+// Routers
 app.get("/", (req, res) => {
   res.send("Api is running..");
 });
-app.get("/api/products", (req, res) => {
-  res.json(products);
-});
-app.get("/api/products/:id", (req, res) => {
-  const product = products.find((product) => product._id === req.params.id);
-  res.json(product);
-});
+app.use("/api/products", productRoutes);
 
 // database connection
 connectDb();
