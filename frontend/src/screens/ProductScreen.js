@@ -1,20 +1,20 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { Button, Card, Col, Image, ListGroup, Row } from "react-bootstrap";
 import { Link, useParams } from "react-router-dom";
 import Ratings from "../components/Ratings";
+import { fetchSingleProduct } from "../redux/reducers/productDetailsReducer";
 
 const ProductScreen = () => {
-  const [product, setProduct] = useState({});
   const { id } = useParams();
+  const { product, loading, error } = useSelector(
+    (state) => state.productDetails
+  );
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    const fetchProduct = async () => {
-      const { data } = await axios.get(`/api/products/${id}`);
-      setProduct(data);
-    };
-
-    fetchProduct();
+    dispatch(fetchSingleProduct(id));
   }, [id]);
 
   return (
