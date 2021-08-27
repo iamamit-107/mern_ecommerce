@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -13,19 +12,29 @@ import {
 import { Link, useParams } from "react-router-dom";
 import Ratings from "../components/Ratings";
 import { fetchSingleProduct } from "../redux/reducers/productDetailsReducer";
+import { addToCart } from "../redux/reducers/cartReducer";
+import { toast } from "react-toastify";
 
 const ProductScreen = () => {
-  const [qty, setQty] = useState(0);
+  const [qty, setQty] = useState(1);
 
   const { id } = useParams();
   const { product, loading, error } = useSelector(
     (state) => state.productDetails
   );
+  const { success } = useSelector((state) => state.cartList);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(fetchSingleProduct(id));
   }, [id]);
+
+  const handleAddToCart = () => {
+    dispatch(addToCart({ id, qty }));
+    if (success) {
+      toast.success("Successfully added to cart!");
+    }
+  };
 
   return (
     <>
@@ -79,7 +88,7 @@ const ProductScreen = () => {
                       <Form.Control
                         as="select"
                         value={qty}
-                        onChange={(e) => setQty(e.target.value)}
+                        onChange={(e) => setQty(parseInt(e.target.value))}
                       >
                         {[...Array(product.countInStock).keys()].map((x) => (
                           <option key={x + 1} value={x + 1}>
@@ -96,6 +105,7 @@ const ProductScreen = () => {
                   <Button
                     className="btn btn-dark"
                     disabled={product.countInStock === 0}
+                    onClick={() => handleAddToCart()}
                   >
                     Add to Cart
                   </Button>
