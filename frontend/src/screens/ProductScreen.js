@@ -22,7 +22,7 @@ const ProductScreen = () => {
   const { product, loading, error } = useSelector(
     (state) => state.productDetails
   );
-  const { success } = useSelector((state) => state.cartList);
+  const { success, error: cartError } = useSelector((state) => state.cartList);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -31,10 +31,16 @@ const ProductScreen = () => {
 
   const handleAddToCart = () => {
     dispatch(addToCart({ id, qty }));
+  };
+
+  useEffect(() => {
+    if (cartError) {
+      toast.warning(cartError);
+    }
     if (success) {
       toast.success("Successfully added to cart!");
     }
-  };
+  }, [cartError, success]);
 
   return (
     <>

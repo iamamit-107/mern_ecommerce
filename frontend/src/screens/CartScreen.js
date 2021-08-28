@@ -1,9 +1,18 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Row, Col, ListGroup, Image, Form } from "react-bootstrap";
+import {
+  Row,
+  Col,
+  ListGroup,
+  Image,
+  Form,
+  Button,
+  Card,
+} from "react-bootstrap";
 import Message from "../components/Message";
 import { toast } from "react-toastify";
-import { updateCart } from "../redux/reducers/cartReducer";
+import { removeCart, updateCart } from "../redux/reducers/cartReducer";
+import { Link } from "react-router-dom";
 
 const CartScreen = () => {
   const { cart, success } = useSelector((state) => state.cartList);
@@ -12,6 +21,11 @@ const CartScreen = () => {
   const handleUpdateCart = (id, qty) => {
     dispatch(updateCart({ id, qty }));
     toast.success("Cart Successfully Updated!");
+  };
+
+  const handleDeleteCart = (id) => {
+    dispatch(removeCart(id));
+    toast.warning("Successfully Removed From Cart!");
   };
   return (
     <div>
@@ -23,13 +37,15 @@ const CartScreen = () => {
             <ListGroup variant="flush">
               {cart.map((item) => (
                 <ListGroup.Item>
-                  <Row>
+                  <Row className="align-items-center">
                     <Col md={2}>
                       <Image src={item.image} fluid rounded />
                     </Col>
-                    <Col md={4}>{item.name}</Col>
+                    <Col md={5}>
+                      <Link to={`/product/${item.product}`}>{item.name}</Link>
+                    </Col>
                     <Col md={2}>${item.price}</Col>
-                    <Col md={2}>
+                    <Col md={1}>
                       <Form.Control
                         as="select"
                         value={item.qty}
@@ -47,11 +63,37 @@ const CartScreen = () => {
                         ))}
                       </Form.Control>
                     </Col>
+                    <Col md={2}>
+                      <Button
+                        variant="dark"
+                        onClick={() => handleDeleteCart(item.product)}
+                      >
+                        <i className="fas fa-trash"></i>
+                      </Button>
+                    </Col>
                   </Row>
                 </ListGroup.Item>
               ))}
             </ListGroup>
           )}
+        </Col>
+        <Col md={4}>
+          <Card>
+            <ListGroup variant="flush">
+              <ListGroup.Item>
+                <h2>
+                  Subtotal ({cart.reduce((acc, item) => acc + item.qty, 0)})
+                  items
+                </h2>
+              </ListGroup.Item>
+              <ListGroup.Item>
+                Total Price : $
+                {cart
+                  .reduce((acc, item) => acc + item.qty * item.price, 0)
+                  .toFixed(2)}
+              </ListGroup.Item>
+            </ListGroup>
+          </Card>
         </Col>
       </Row>
     </div>

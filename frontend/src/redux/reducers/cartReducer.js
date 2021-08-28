@@ -36,13 +36,20 @@ const productSlice = createSlice({
 
       localStorage.setItem("cartList", JSON.stringify(state.cart));
     },
+    removeCart: (state, action) => {
+      state.cart = state.cart.filter((c) => c.product !== action.payload);
+      localStorage.setItem("cartList", JSON.stringify(state.cart));
+    },
   },
   extraReducers: {
     [addToCart.pending]: (state, action) => {
       state.loading = true;
+      state.success = true;
+      state.error = null;
     },
     [addToCart.fulfilled]: (state, action) => {
       state.loading = false;
+      state.success = true;
       const index = state.cart.findIndex(
         (c) => c.product === action.payload.product
       );
@@ -51,8 +58,7 @@ const productSlice = createSlice({
       } else {
         state.cart.push(action.payload);
       }
-
-      state.success = true;
+      state.success = false;
       localStorage.setItem("cartList", JSON.stringify(state.cart));
     },
     [addToCart.rejected]: (state, action) => {
@@ -63,5 +69,5 @@ const productSlice = createSlice({
   },
 });
 
-export const { updateCart } = productSlice.actions;
+export const { updateCart, removeCart } = productSlice.actions;
 export default productSlice.reducer;
