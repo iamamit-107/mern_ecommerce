@@ -8,6 +8,7 @@ import ProductScreen from "./screens/ProductScreen";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import CartScreen from "./screens/CartScreen";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Container>
             <Route path="/" component={HomeScreen} exact />
             <Route path="/product/:id" component={ProductScreen} exact />
+            <Route path="/cart" component={CartScreen} exact />
           </Container>
         </main>
         <Footer />

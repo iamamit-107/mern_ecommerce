@@ -27,7 +27,16 @@ export const addToCart = createAsyncThunk("cart/addToCart", async (datas) => {
 const productSlice = createSlice({
   name: "cart",
   initialState,
-  reducers: {},
+  reducers: {
+    updateCart: (state, action) => {
+      const index = state.cart.findIndex(
+        (c) => c.product === action.payload.id
+      );
+      state.cart[index].qty = action.payload.qty;
+
+      localStorage.setItem("cartList", JSON.stringify(state.cart));
+    },
+  },
   extraReducers: {
     [addToCart.pending]: (state, action) => {
       state.loading = true;
@@ -54,4 +63,5 @@ const productSlice = createSlice({
   },
 });
 
+export const { updateCart } = productSlice.actions;
 export default productSlice.reducer;
