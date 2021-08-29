@@ -11,18 +11,25 @@ const initialState = {
 };
 
 // async action for product fetching
-export const addToCart = createAsyncThunk("cart/addToCart", async (datas) => {
-  const { id, qty } = datas;
-  const { data } = await axios.get(`/api/products/${id}`);
-  return {
-    product: data._id,
-    name: data.name,
-    image: data.image,
-    price: data.price,
-    countInStock: data.countInStock,
-    qty,
-  };
-});
+export const addToCart = createAsyncThunk(
+  "cart/addToCart",
+  async (datas, { rejectWithValue }) => {
+    const { id, qty } = datas;
+    try {
+      const { data } = await axios.get(`/api/products/${id}`);
+      return {
+        product: data._id,
+        name: data.name,
+        image: data.image,
+        price: data.price,
+        countInStock: data.countInStock,
+        qty,
+      };
+    } catch (err) {
+      return rejectWithValue(err.response.data.message);
+    }
+  }
+);
 
 const productSlice = createSlice({
   name: "cart",
@@ -64,7 +71,7 @@ const productSlice = createSlice({
     [addToCart.rejected]: (state, action) => {
       state.loading = false;
       state.success = false;
-      state.error = action.error.message;
+      state.error = action.payload;
     },
   },
 });

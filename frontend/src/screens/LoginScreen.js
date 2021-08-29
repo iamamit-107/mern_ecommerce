@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Form, Button, Row, Col } from "react-bootstrap";
 import { loginUser } from "../redux/reducers/loginReducer";
 import Message from "../components/Message";
 import { Loader } from "../components/Loader";
 import FormContainer from "../components/FormContainer";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 
-const LoginScreen = () => {
+const LoginScreen = ({ history }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -23,12 +23,19 @@ const LoginScreen = () => {
     setEmail("");
     setPassword("");
   };
+
+  useEffect(() => {
+    console.log(loginInfo);
+    if (loginInfo.name) {
+      history.push("/");
+    }
+  }, [loginInfo]);
   return (
     <FormContainer>
       <h1 className="text-center">Sign In</h1>
       {error && <Message variant="danger">{error}</Message>}
       {loading && <Loader />}
-      <Form onSubmit={submitHandler}>
+      <Form onSubmit={submitHandler} autoComplete="off">
         <Form.Group controlId="email" className="mb-3">
           <Form.Label>Email Address</Form.Label>
           <Form.Control
@@ -37,6 +44,7 @@ const LoginScreen = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="px-3"
+            autoComplete="off"
           ></Form.Control>
         </Form.Group>
 
@@ -48,6 +56,7 @@ const LoginScreen = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="px-3"
+            autoComplete="off"
           ></Form.Control>
         </Form.Group>
 
