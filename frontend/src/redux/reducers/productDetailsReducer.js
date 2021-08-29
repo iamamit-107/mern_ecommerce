@@ -23,6 +23,7 @@ const productDetailsSlice = createSlice({
   extraReducers: {
     [fetchSingleProduct.pending]: (state, action) => {
       state.loading = true;
+      state.product = { reviews: [] };
     },
     [fetchSingleProduct.fulfilled]: (state, action) => {
       state.loading = false;
