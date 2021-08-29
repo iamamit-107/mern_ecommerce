@@ -42,7 +42,47 @@ const getProfileById = asyncHandler(async (req, res) => {
   }
 });
 
+/**
+ * @desc: Auth Register
+ * @route: GET api/users/register
+ * @access: Public
+ */
+const registerUser = asyncHandler(async (req, res) => {
+  const { name, email, password } = req.body;
+
+  const userExist = await User.findOne({ email });
+
+  if (userExist) {
+    res.status(403);
+    throw new Error("User already exist");
+  }
+
+  const user = await User.create({
+    name,
+    email,
+    password,
+  });
+
+  if (user) {
+    const createdUser = {
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      isAdmin: user.isAdmin,
+      token: generateToken(user._id),
+    };
+
+    res.status(201).json({
+      createdUser,
+    });
+  } else {
+    res.status(400);
+    throw new Error("Invalid user data");
+  }
+});
+
 module.exports = {
   authUser,
   getProfileById,
+  registerUser,
 };

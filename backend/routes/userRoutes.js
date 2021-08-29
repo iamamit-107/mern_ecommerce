@@ -1,11 +1,22 @@
 const express = require("express");
-const { authUser, getProfileById } = require("../controllers/userController");
+const {
+  authUser,
+  getProfileById,
+  registerUser,
+} = require("../controllers/userController");
 const protectRoute = require("../middleware/authMiddleware");
 const router = express.Router();
 
 /**
  * imports end here
  */
+
+/**
+ * @desc: User Profile
+ * @route: GET api/users/register
+ * @access: Private
+ */
+router.post("/", registerUser);
 
 /**
  * @desc: AUTH USER
