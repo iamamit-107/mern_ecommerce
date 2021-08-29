@@ -26,6 +26,23 @@ const authUser = asyncHandler(async (req, res) => {
   }
 });
 
+/**
+ * @desc: Auth Login
+ * @route: GET api/users/login
+ * @access: Public
+ */
+const getProfileById = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id).select("-password");
+
+  if (user) {
+    res.json(user);
+  } else {
+    res.status(404);
+    throw new Error("User Not Found!");
+  }
+});
+
 module.exports = {
   authUser,
+  getProfileById,
 };
