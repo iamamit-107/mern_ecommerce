@@ -1,6 +1,3 @@
-/**
- * imports Start here
- */
 const express = require("express");
 const {
   getProducts,

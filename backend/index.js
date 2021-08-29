@@ -5,12 +5,16 @@ const connectDb = require("./config/db");
 
 // Router import
 const productRoutes = require("./routes/productRoutes");
+const userRoutes = require("./routes/userRoutes");
+
+// Middlewares
 const {
   notFound,
   defaultErrorHandler,
 } = require("./middleware/errorMiddleware");
 
 const app = express();
+app.use(express.json());
 
 dotenv.config();
 
@@ -19,6 +23,7 @@ app.get("/", (req, res) => {
   res.send("Api is running..");
 });
 app.use("/api/products", productRoutes);
+app.use("/api/users", userRoutes);
 
 /**
  * @Error handler middlewares
