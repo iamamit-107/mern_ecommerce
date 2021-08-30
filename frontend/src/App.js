@@ -10,6 +10,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import CartScreen from "./screens/CartScreen";
 import LoginScreen from "./screens/LoginScreen";
+import RegisterScreen from "./screens/RegisterScreen";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
             <Route path="/product/:id" component={ProductScreen} exact />
             <Route path="/cart" component={CartScreen} exact />
             <Route path="/login" component={LoginScreen} exact />
+            <Route path="/register" component={RegisterScreen} exact />
           </Container>
         </main>
         <Footer />

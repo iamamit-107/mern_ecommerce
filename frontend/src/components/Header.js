@@ -3,6 +3,7 @@ import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/reducers/loginReducer";
+import { toast } from "react-toastify";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -10,6 +11,11 @@ const Header = () => {
   const {
     loginInfo: { name },
   } = useSelector((state) => state.loginUser);
+
+  const handleLogout = () => {
+    dispatch(logout());
+    toast.success("User Logged Out!");
+  };
 
   return (
     <header>
@@ -31,7 +37,7 @@ const Header = () => {
                   <LinkContainer to="/profile">
                     <NavDropdown.Item>Profile</NavDropdown.Item>
                   </LinkContainer>
-                  <NavDropdown.Item onClick={() => dispatch(logout())}>
+                  <NavDropdown.Item onClick={() => handleLogout()}>
                     Logout
                   </NavDropdown.Item>
                 </NavDropdown>

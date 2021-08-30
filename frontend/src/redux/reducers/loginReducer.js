@@ -35,6 +35,11 @@ const productSlice = createSlice({
   name: "login",
   initialState,
   reducers: {
+    login: (state, action) => {
+      state.loginInfo = action.payload;
+
+      localStorage.setItem("loginInfo", JSON.stringify(state.loginInfo));
+    },
     logout: (state, action) => {
       state.loginInfo = [];
       localStorage.removeItem("loginInfo");
@@ -58,5 +63,5 @@ const productSlice = createSlice({
   },
 });
 
-export const { logout } = productSlice.actions;
+export const { logout, login } = productSlice.actions;
 export default productSlice.reducer;
