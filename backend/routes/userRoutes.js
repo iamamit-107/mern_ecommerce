@@ -3,6 +3,7 @@ const {
   authUser,
   getProfileById,
   registerUser,
+  updateProfile,
 } = require("../controllers/userController");
 const protectRoute = require("../middleware/authMiddleware");
 const router = express.Router();
@@ -31,5 +32,6 @@ router.post("/login", authUser);
  * @access: Private
  */
 router.get("/profile", protectRoute, getProfileById);
+router.put("/profile", protectRoute, updateProfile);
 
 module.exports = router;
