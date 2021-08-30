@@ -4,9 +4,11 @@ import { LinkContainer } from "react-router-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/reducers/loginReducer";
 import { toast } from "react-toastify";
+import { useHistory } from "react-router-dom";
 
 const Header = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const {
     loginInfo: { name },
@@ -15,6 +17,7 @@ const Header = () => {
   const handleLogout = () => {
     dispatch(logout());
     toast.success("User Logged Out!");
+    history.push("/");
   };
 
   return (
