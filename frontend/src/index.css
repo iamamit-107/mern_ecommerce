@@ -10,3 +10,7 @@ a {
 .rating i {
   color: #444;
 }
+
+.form-group {
+  margin-bottom: 25px;
+}
