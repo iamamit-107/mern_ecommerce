@@ -1,9 +1,19 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Button, Row, Col, ListGroup, Image, Card } from "react-bootstrap";
+import {
+  Button,
+  Row,
+  Col,
+  ListGroup,
+  Image,
+  Card,
+  Spinner,
+} from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message";
 import CheckoutSteps from "../components/CheckoutSteps";
+import { createOrder, resetOrder } from "../redux/reducers/orderReducer";
+import { resetCart } from "../redux/reducers/cartReducer";
 
 const PlaceOrderScreen = ({ history }) => {
   const dispatch = useDispatch();
@@ -11,6 +21,12 @@ const PlaceOrderScreen = ({ history }) => {
   const { cart, error, shippingAddress, paymentMethod } = useSelector(
     (state) => state.cartList
   );
+  const {
+    order,
+    loading,
+    success,
+    error: orderError,
+  } = useSelector((state) => state.orders);
 
   if (!shippingAddress.address) {
     history.push("/shipping");
@@ -32,6 +48,28 @@ const PlaceOrderScreen = ({ history }) => {
     Number(shippingPrice) +
     Number(taxPrice)
   ).toFixed(2);
+
+  const handleOrder = () => {
+    dispatch(
+      createOrder({
+        shippingAddress,
+        paymentMethod,
+        orderItems: cart,
+        itemsPrice,
+        shippingPrice,
+        taxPrice,
+        totalPrice,
+      })
+    );
+  };
+
+  useEffect(() => {
+    if (success) {
+      history.push(`/order/${order._id}`);
+      dispatch(resetOrder());
+      dispatch(resetCart());
+    }
+  }, [history, success]);
 
   return (
     <>
@@ -122,8 +160,16 @@ const PlaceOrderScreen = ({ history }) => {
                 {error && <Message variant="danger">{error}</Message>}
               </ListGroup.Item>
               <ListGroup.Item>
-                <Button type="button" className="btn-block">
-                  Place Order
+                <Button
+                  type="button"
+                  className="btn-block"
+                  onClick={() => handleOrder()}
+                  disabled={loading}
+                >
+                  Place Order{" "}
+                  {loading && (
+                    <Spinner animation="border" role="status" size="sm" />
+                  )}
                 </Button>
               </ListGroup.Item>
             </ListGroup>

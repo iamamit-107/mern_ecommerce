@@ -22,7 +22,7 @@ const addOrderItems = asyncHandler(async (req, res) => {
   }
 
   try {
-    const { data } = await Order.create({
+    const data = await Order.create({
       user: req.user._id,
       shippingAddress,
       paymentMethod,
