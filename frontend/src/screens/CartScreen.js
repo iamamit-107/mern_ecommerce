@@ -58,7 +58,7 @@ const CartScreen = () => {
                     <Col md={2}>
                       <Form.Control
                         as="select"
-                        value={10}
+                        value={item.qty}
                         onChange={(e) =>
                           handleUpdateCart(
                             item.product,
