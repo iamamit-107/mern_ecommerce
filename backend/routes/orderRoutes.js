@@ -17,6 +17,6 @@ router.post("/", protectRoute, addOrderItems);
  * @route: POST api/orders/:id
  * @access: Private
  */
-router.post("/:id", protectRoute, getOrderById);
+router.get("/:id", protectRoute, getOrderById);
 
 module.exports = router;

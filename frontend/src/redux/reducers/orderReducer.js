@@ -4,6 +4,8 @@ import { toast } from "react-toastify";
 
 const initialState = {
   order: [],
+  singleOrder: {},
+  singleOrderSuccess: false,
   loading: false,
   error: null,
   success: false,
@@ -24,7 +26,25 @@ export const createOrder = createAsyncThunk(
           Authorization: `Bearer ${loginInfo.token}`,
         },
       });
-      console.log(data);
+      return data;
+    } catch (err) {
+      return rejectWithValue(err.response.data.message);
+    }
+  }
+);
+export const getOrderById = createAsyncThunk(
+  "order/sigleOrder",
+  async (id, { rejectWithValue, getState }) => {
+    const {
+      loginUser: { loginInfo },
+    } = getState();
+
+    try {
+      const { data } = await axios.get(`/api/orders/${id}`, {
+        headers: {
+          Authorization: `Bearer ${loginInfo.token}`,
+        },
+      });
       return data;
     } catch (err) {
       return rejectWithValue(err.response.data.message);
@@ -33,7 +53,7 @@ export const createOrder = createAsyncThunk(
 );
 
 const registerSlice = createSlice({
-  name: "register",
+  name: "order",
   initialState,
   reducers: {
     resetOrder: (state, action) => {
@@ -47,6 +67,7 @@ const registerSlice = createSlice({
     [createOrder.pending]: (state, action) => {
       state.loading = true;
       state.error = null;
+      state.success = false;
     },
     [createOrder.fulfilled]: (state, action) => {
       state.loading = false;
@@ -58,6 +79,21 @@ const registerSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
       state.success = false;
+    },
+    [getOrderById.pending]: (state, action) => {
+      state.loading = true;
+      state.error = null;
+      state.singleOrderSuccess = false;
+    },
+    [getOrderById.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.singleOrder = action.payload;
+      state.singleOrderSuccess = true;
+    },
+    [getOrderById.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+      state.singleOrderSuccess = false;
     },
   },
 });
