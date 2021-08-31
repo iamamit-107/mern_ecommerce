@@ -8,6 +8,9 @@ const initialState = {
   shippingAddress: localStorage.getItem("shippingAddress")
     ? JSON.parse(localStorage.getItem("shippingAddress"))
     : {},
+  paymentMethod: localStorage.getItem("paymentMethod")
+    ? JSON.parse(localStorage.getItem("paymentMethod"))
+    : "",
   loading: false,
   error: null,
   success: false,
@@ -57,6 +60,13 @@ const productSlice = createSlice({
         JSON.stringify(state.shippingAddress)
       );
     },
+    savePaymentMethod: (state, action) => {
+      state.paymentMethod = action.payload;
+      localStorage.setItem(
+        "paymentMethod",
+        JSON.stringify(state.paymentMethod)
+      );
+    },
   },
   extraReducers: {
     [addToCart.pending]: (state, action) => {
@@ -86,6 +96,10 @@ const productSlice = createSlice({
   },
 });
 
-export const { updateCart, removeCart, saveShippingAddress } =
-  productSlice.actions;
+export const {
+  updateCart,
+  removeCart,
+  saveShippingAddress,
+  savePaymentMethod,
+} = productSlice.actions;
 export default productSlice.reducer;
