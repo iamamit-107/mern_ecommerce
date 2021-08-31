@@ -12,11 +12,13 @@ import {
 import Message from "../components/Message";
 import { toast } from "react-toastify";
 import { removeCart, updateCart } from "../redux/reducers/cartReducer";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 const CartScreen = () => {
   const { cart, success } = useSelector((state) => state.cartList);
+  const { loginInfo } = useSelector((state) => state.loginUser);
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const handleUpdateCart = (id, qty) => {
     dispatch(updateCart({ id, qty }));
@@ -26,6 +28,14 @@ const CartScreen = () => {
   const handleDeleteCart = (id) => {
     dispatch(removeCart(id));
     toast.warning("Successfully Removed From Cart!");
+  };
+
+  const checkoutHandler = () => {
+    if (loginInfo.name) {
+      history.push("/checkout");
+    } else {
+      history.push("/login");
+    }
   };
   return (
     <div>
@@ -41,14 +51,14 @@ const CartScreen = () => {
                     <Col md={2}>
                       <Image src={item.image} fluid rounded />
                     </Col>
-                    <Col md={5}>
+                    <Col md={4}>
                       <Link to={`/product/${item.product}`}>{item.name}</Link>
                     </Col>
                     <Col md={2}>${item.price}</Col>
-                    <Col md={1}>
+                    <Col md={2}>
                       <Form.Control
                         as="select"
-                        value={item.qty}
+                        value={10}
                         onChange={(e) =>
                           handleUpdateCart(
                             item.product,
@@ -91,6 +101,16 @@ const CartScreen = () => {
                 {cart
                   .reduce((acc, item) => acc + item.qty * item.price, 0)
                   .toFixed(2)}
+              </ListGroup.Item>
+              <ListGroup.Item>
+                <Button
+                  type="button"
+                  className="btn-block"
+                  disabled={cart.length === 0}
+                  onClick={checkoutHandler}
+                >
+                  Proceed To Checkout
+                </Button>
               </ListGroup.Item>
             </ListGroup>
           </Card>
