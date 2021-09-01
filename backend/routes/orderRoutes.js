@@ -2,6 +2,7 @@ const express = require("express");
 const {
   addOrderItems,
   getOrderById,
+  updateOrderToPaid,
 } = require("../controllers/orderController");
 const protectRoute = require("../middleware/authMiddleware");
 const router = express.Router();
@@ -18,5 +19,11 @@ router.post("/", protectRoute, addOrderItems);
  * @access: Private
  */
 router.get("/:id", protectRoute, getOrderById);
+/**
+ * @desc: PUT Order by id
+ * @route: PUT api/orders/:id/pay
+ * @access: Private
+ */
+router.get("/:id/pay", protectRoute, updateOrderToPaid);
 
 module.exports = router;
