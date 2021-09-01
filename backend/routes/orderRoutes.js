@@ -24,6 +24,6 @@ router.get("/:id", protectRoute, getOrderById);
  * @route: PUT api/orders/:id/pay
  * @access: Private
  */
-router.get("/:id/pay", protectRoute, updateOrderToPaid);
+router.put("/:id/pay", protectRoute, updateOrderToPaid);
 
 module.exports = router;

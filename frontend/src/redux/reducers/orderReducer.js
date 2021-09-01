@@ -4,11 +4,15 @@ import { toast } from "react-toastify";
 
 const initialState = {
   order: [],
-  singleOrder: {},
+  singleOrder: null,
   singleOrderSuccess: false,
   loading: false,
   error: null,
   success: false,
+  payOrder: {},
+  payOrderLoading: false,
+  payOrderSuccess: false,
+  payOrderError: null,
 };
 
 // async order Items
@@ -51,6 +55,30 @@ export const getOrderById = createAsyncThunk(
     }
   }
 );
+export const updatePay = createAsyncThunk(
+  "order/updatePay",
+  async (info, { rejectWithValue, getState }) => {
+    const {
+      loginUser: { loginInfo },
+    } = getState();
+
+    try {
+      const { data } = await axios.put(
+        `/api/orders/${info.id}/pay`,
+        info.paypalResult,
+        {
+          "Content-Type": "application/json",
+          headers: {
+            Authorization: `Bearer ${loginInfo.token}`,
+          },
+        }
+      );
+      return data;
+    } catch (err) {
+      return rejectWithValue(err.response.data.message);
+    }
+  }
+);
 
 const registerSlice = createSlice({
   name: "order",
@@ -61,6 +89,17 @@ const registerSlice = createSlice({
       state.loading = false;
       state.error = null;
       state.success = false;
+    },
+    resetSingleOrder: (state, action) => {
+      state.singleOrder = null;
+      state.singleOrderSuccess = false;
+      state.error = null;
+    },
+    resetPayOrder: (state, action) => {
+      state.payOrder = {};
+      state.payOrderLoading = false;
+      state.payOrderSuccess = false;
+      state.payOrderError = null;
     },
   },
   extraReducers: {
@@ -95,8 +134,24 @@ const registerSlice = createSlice({
       state.error = action.payload;
       state.singleOrderSuccess = false;
     },
+    [updatePay.pending]: (state, action) => {
+      state.payOrderLoading = true;
+      state.error = null;
+      state.singleOrderSuccess = false;
+    },
+    [updatePay.fulfilled]: (state, action) => {
+      state.payOrderLoading = false;
+      state.payOrder = action.payload;
+      state.payOrderSuccess = true;
+    },
+    [updatePay.rejected]: (state, action) => {
+      state.payOrderLoading = false;
+      state.payOrderError = action.payload;
+      state.payOrderSuccess = false;
+    },
   },
 });
 
-export const { resetOrder } = registerSlice.actions;
+export const { resetOrder, resetPayOrder, resetSingleOrder } =
+  registerSlice.actions;
 export default registerSlice.reducer;
