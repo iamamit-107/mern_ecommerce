@@ -61,7 +61,13 @@ export const updateUserProfile = createAsyncThunk(
 const productSlice = createSlice({
   name: "user",
   initialState,
-  reducers: {},
+  reducers: {
+    resetUser: (state, action) => {
+      state.user = {};
+      state.loading = false;
+      state.error = null;
+    },
+  },
   extraReducers: {
     [getUserProfile.pending]: (state, action) => {
       state.loading = true;
@@ -89,5 +95,7 @@ const productSlice = createSlice({
     },
   },
 });
+
+export const { resetUser } = productSlice.actions;
 
 export default productSlice.reducer;

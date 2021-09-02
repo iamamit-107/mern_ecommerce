@@ -8,6 +8,7 @@ import {
 } from "../redux/reducers/userDetailsReducer";
 import { Loader } from "../components/Loader";
 import Message from "../components/Message";
+import { getMyOrders } from "../redux/reducers/orderReducer";
 
 const ProfileScreen = ({ location, history }) => {
   const [name, setName] = useState("");
@@ -24,12 +25,16 @@ const ProfileScreen = ({ location, history }) => {
   const userLogin = useSelector((state) => state.loginUser);
   const { loginInfo } = userLogin;
 
+  const { orderLists, orderListLoading, orderListSuccess, orderListError } =
+    useSelector((state) => state.orders);
+
   useEffect(() => {
     if (!loginInfo) {
       history.push("/login");
     } else {
       if (!user || !user.name) {
         dispatch(getUserProfile("profile"));
+        dispatch(getMyOrders(""));
       } else {
         setName(user.name);
         setEmail(user.email);
@@ -95,14 +100,14 @@ const ProfileScreen = ({ location, history }) => {
           </Form>
         )}
       </Col>
-      {/* <Col md={9}>
+      <Col md={9}>
         <h2>My Orders</h2>
-        {loadingOrders ? (
+        {orderListLoading ? (
           <Loader />
-        ) : errorOrders ? (
-          <Message variant='danger'>{errorOrders}</Message>
+        ) : orderListError ? (
+          <Message variant="danger">{orderListError}</Message>
         ) : (
-          <Table striped bordered hover responsive className='table-sm'>
+          <Table striped bordered hover responsive className="table-sm">
             <thead>
               <tr>
                 <th>ID</th>
@@ -114,7 +119,7 @@ const ProfileScreen = ({ location, history }) => {
               </tr>
             </thead>
             <tbody>
-              {orders.map((order) => (
+              {orderLists.map((order) => (
                 <tr key={order._id}>
                   <td>{order._id}</td>
                   <td>{order.createdAt.substring(0, 10)}</td>
@@ -123,19 +128,19 @@ const ProfileScreen = ({ location, history }) => {
                     {order.isPaid ? (
                       order.paidAt.substring(0, 10)
                     ) : (
-                      <i className='fas fa-times' style={{ color: 'red' }}></i>
+                      <i className="fas fa-times" style={{ color: "red" }}></i>
                     )}
                   </td>
                   <td>
                     {order.isDelivered ? (
                       order.deliveredAt.substring(0, 10)
                     ) : (
-                      <i className='fas fa-times' style={{ color: 'red' }}></i>
+                      <i className="fas fa-times" style={{ color: "red" }}></i>
                     )}
                   </td>
                   <td>
                     <LinkContainer to={`/order/${order._id}`}>
-                      <Button className='btn-sm' variant='light'>
+                      <Button className="btn-sm" variant="light">
                         Details
                       </Button>
                     </LinkContainer>
@@ -145,7 +150,7 @@ const ProfileScreen = ({ location, history }) => {
             </tbody>
           </Table>
         )}
-      </Col> */}
+      </Col>
     </Row>
   );
 };

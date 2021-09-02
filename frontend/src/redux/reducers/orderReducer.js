@@ -13,6 +13,10 @@ const initialState = {
   payOrderLoading: false,
   payOrderSuccess: false,
   payOrderError: null,
+  orderLists: [],
+  orderListLoading: false,
+  orderListSuccess: false,
+  orderListError: null,
 };
 
 // async order Items
@@ -79,6 +83,25 @@ export const updatePay = createAsyncThunk(
     }
   }
 );
+export const getMyOrders = createAsyncThunk(
+  "order/myOrders",
+  async (id, { rejectWithValue, getState }) => {
+    const {
+      loginUser: { loginInfo },
+    } = getState();
+
+    try {
+      const { data } = await axios.get(`/api/orders/myorders`, {
+        headers: {
+          Authorization: `Bearer ${loginInfo.token}`,
+        },
+      });
+      return data;
+    } catch (err) {
+      return rejectWithValue(err.response.data.message);
+    }
+  }
+);
 
 const registerSlice = createSlice({
   name: "order",
@@ -100,6 +123,12 @@ const registerSlice = createSlice({
       state.payOrderLoading = false;
       state.payOrderSuccess = false;
       state.payOrderError = null;
+    },
+    resetOrderList: (state, action) => {
+      state.orderListSuccess = false;
+      state.orderListError = action.payload;
+      state.orderListLoading = false;
+      state.orderLists = [];
     },
   },
   extraReducers: {
@@ -149,9 +178,23 @@ const registerSlice = createSlice({
       state.payOrderError = action.payload;
       state.payOrderSuccess = false;
     },
+    [getMyOrders.pending]: (state, action) => {
+      state.orderListLoading = true;
+      state.orderListError = null;
+    },
+    [getMyOrders.fulfilled]: (state, action) => {
+      state.orderListLoading = false;
+      state.orderLists = action.payload;
+      state.orderListSuccess = true;
+    },
+    [getMyOrders.rejected]: (state, action) => {
+      state.orderListSuccess = false;
+      state.orderListError = action.payload;
+      state.orderListLoading = false;
+    },
   },
 });
 
-export const { resetOrder, resetPayOrder, resetSingleOrder } =
+export const { resetOrder, resetPayOrder, resetSingleOrder, resetOrderList } =
   registerSlice.actions;
 export default registerSlice.reducer;

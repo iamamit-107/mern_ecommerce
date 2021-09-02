@@ -15,6 +15,12 @@ const router = express.Router();
  */
 router.post("/", protectRoute, addOrderItems);
 /**
+ * @desc: Get Order of logged in user
+ * @route: PUT api/orders/myorders
+ * @access: Private
+ */
+router.get("/myorders", protectRoute, getMyOrders);
+/**
  * @desc: get order by id
  * @route: POST api/orders/:id
  * @access: Private
@@ -26,11 +32,5 @@ router.get("/:id", protectRoute, getOrderById);
  * @access: Private
  */
 router.put("/:id/pay", protectRoute, updateOrderToPaid);
-/**
- * @desc: Get Order of logged in user
- * @route: PUT api/orders/myorders
- * @access: Private
- */
-router.get("/myorders", protectRoute, getMyOrders);
 
 module.exports = router;
