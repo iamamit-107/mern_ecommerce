@@ -3,6 +3,7 @@ const {
   addOrderItems,
   getOrderById,
   updateOrderToPaid,
+  getMyOrders,
 } = require("../controllers/orderController");
 const protectRoute = require("../middleware/authMiddleware");
 const router = express.Router();
@@ -25,5 +26,11 @@ router.get("/:id", protectRoute, getOrderById);
  * @access: Private
  */
 router.put("/:id/pay", protectRoute, updateOrderToPaid);
+/**
+ * @desc: Get Order of logged in user
+ * @route: PUT api/orders/myorders
+ * @access: Private
+ */
+router.get("/myorders", protectRoute, getMyOrders);
 
 module.exports = router;
