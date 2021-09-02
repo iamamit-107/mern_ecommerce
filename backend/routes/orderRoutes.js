@@ -5,7 +5,7 @@ const {
   updateOrderToPaid,
   getMyOrders,
 } = require("../controllers/orderController");
-const protectRoute = require("../middleware/authMiddleware");
+const { protectRoute, adminRoute } = require("../middleware/authMiddleware");
 const router = express.Router();
 
 /**
