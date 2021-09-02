@@ -13,7 +13,7 @@ const Header = () => {
   const history = useHistory();
 
   const {
-    loginInfo: { name },
+    loginInfo: { name, isAdmin },
   } = useSelector((state) => state.loginUser);
 
   const handleLogout = () => {
@@ -34,7 +34,7 @@ const Header = () => {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto">
-              <LinkContainer to="/cart">
+              <LinkContainer to="/cart" className="nav-item">
                 <Nav.Link>
                   <i className="fas fa-shopping-cart" /> Cart
                 </Nav.Link>
@@ -55,6 +55,19 @@ const Header = () => {
                     Sign in
                   </Nav.Link>
                 </LinkContainer>
+              )}
+              {isAdmin && (
+                <NavDropdown title="Admin" id="username" drop="left">
+                  <LinkContainer to="/admin/user-list">
+                    <NavDropdown.Item>Users</NavDropdown.Item>
+                  </LinkContainer>
+                  <LinkContainer to="/admin/products">
+                    <NavDropdown.Item>Products</NavDropdown.Item>
+                  </LinkContainer>
+                  <LinkContainer to="/admin/orders">
+                    <NavDropdown.Item>Orders</NavDropdown.Item>
+                  </LinkContainer>
+                </NavDropdown>
               )}
             </Nav>
           </Navbar.Collapse>
