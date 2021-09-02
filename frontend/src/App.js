@@ -17,6 +17,8 @@ import PaymentScreen from "./screens/PaymentScreen";
 import PlaceOrderScreen from "./screens/PlaceOrderScreen";
 import OrderScreen from "./screens/OrderScreen";
 import UserListScreen from "./screens/UsersListScreen";
+import AdminProtectedRoutes from "./protectedRotes/AdminProtectedRoutes";
+import UserProtectedRoutes from "./protectedRotes/UserProtectedRoutes";
 
 function App() {
   return (
@@ -30,12 +32,35 @@ function App() {
             <Route path="/cart" component={CartScreen} exact />
             <Route path="/login" component={LoginScreen} exact />
             <Route path="/register" component={RegisterScreen} exact />
-            <Route path="/profile" component={ProfileScreen} exact />
-            <Route path="/checkout" component={ShippingScreen} exact />
-            <Route path="/payment" component={PaymentScreen} exact />
-            <Route path="/placeorder" component={PlaceOrderScreen} exact />
-            <Route path="/order/:id" component={OrderScreen} exact />
-            <Route path="/admin/user-list" component={UserListScreen} exact />
+
+            {/* User protected routes */}
+            <UserProtectedRoutes
+              path="/profile"
+              component={ProfileScreen}
+              exact
+            />
+            <UserProtectedRoutes
+              path="/checkout"
+              component={ShippingScreen}
+              exact
+            />
+            <UserProtectedRoutes
+              path="/payment"
+              component={PaymentScreen}
+              exact
+            />
+            <UserProtectedRoutes
+              ath="/placeorder"
+              component={PlaceOrderScreen}
+              exact
+            />
+
+            {/* admin protected routes */}
+            <AdminProtectedRoutes
+              path="/admin/user-list"
+              component={UserListScreen}
+              exact
+            />
           </Container>
         </main>
         <Footer />

@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import { useHistory } from "react-router-dom";
 import { resetOrderList } from "../redux/reducers/orderReducer";
 import { resetUser } from "../redux/reducers/userDetailsReducer";
+import { resetUserList } from "../redux/reducers/userListReducer";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -20,6 +21,7 @@ const Header = () => {
     dispatch(logout());
     dispatch(resetOrderList());
     dispatch(resetUser());
+    dispatch(resetUserList());
     toast.success("User Logged Out!");
     history.push("/");
   };
