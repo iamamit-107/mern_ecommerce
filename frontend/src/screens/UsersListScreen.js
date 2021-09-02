@@ -5,17 +5,37 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUsers } from "../redux/reducers/userListReducer";
 import { Loader } from "../components/Loader";
 import Message from "../components/Message";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const UserListScreen = ({ history }) => {
   const dispatch = useDispatch();
   const { userList, loading, error } = useSelector((state) => state.users);
+  const {
+    loginInfo: { token },
+  } = useSelector((state) => state.loginUser);
 
   useEffect(() => {
     dispatch(getUsers());
   }, [dispatch]);
 
-  const deleteHandler = (id) => {
-    console.log(id);
+  const deleteHandler = async (id) => {
+    try {
+      const { data } = await axios.delete(`/api/users/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (data) {
+        toast.success(data.message);
+        dispatch(getUsers());
+      } else {
+        toast.error("Something went wrong!");
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
 
   return (

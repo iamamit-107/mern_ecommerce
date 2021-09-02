@@ -122,10 +122,23 @@ const getAllUsers = asyncHandler(async (req, res) => {
   res.json(users);
 });
 
+/**
+ * @desc: delete all users
+ * @route: DELETE api/users
+ * @access: Private
+ */
+const deleteUserById = asyncHandler(async (req, res) => {
+  const user = await User.deleteOne({ _id: req.params.id });
+  if (user) {
+    res.json({ message: "User deleted successfully" });
+  }
+});
+
 module.exports = {
   authUser,
   getProfileById,
   registerUser,
   updateProfile,
   getAllUsers,
+  deleteUserById,
 };

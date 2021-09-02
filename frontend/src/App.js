@@ -50,7 +50,7 @@ function App() {
               exact
             />
             <UserProtectedRoutes
-              ath="/placeorder"
+              path="/placeorder"
               component={PlaceOrderScreen}
               exact
             />
