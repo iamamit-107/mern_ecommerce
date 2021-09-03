@@ -3,7 +3,12 @@ import { LinkContainer } from "react-router-bootstrap";
 import { Table, Button, Row, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 // import Paginate from "../components/Paginate";
-import { deleteProduct, fetchProducts } from "../redux/reducers/productReducer";
+import {
+  clearCreatedProduct,
+  createProduct,
+  deleteProduct,
+  fetchProducts,
+} from "../redux/reducers/productReducer";
 import { Loader } from "../components/Loader";
 import Message from "../components/Message";
 
@@ -11,18 +16,32 @@ const ProductListScreen = ({ history, match }) => {
   const dispatch = useDispatch();
 
   const productList = useSelector((state) => state.productLists);
-  const { loading, error, products, deleteLoading } = productList;
+  const {
+    loading,
+    error,
+    products,
+    deleteLoading,
+    createdProduct,
+    createLoading,
+    createSuccess,
+    createError,
+  } = productList;
 
   useEffect(() => {
-    dispatch(fetchProducts());
-  }, [dispatch]);
+    dispatch(clearCreatedProduct());
+    if (createSuccess) {
+      history.push(`/admin/product/${createdProduct._id}/edit`);
+    } else {
+      dispatch(fetchProducts());
+    }
+  }, [dispatch, createSuccess]);
 
   const deleteHandler = (id) => {
     dispatch(deleteProduct(id));
   };
 
   const createProductHandler = () => {
-    // dispatch(createProduct())
+    dispatch(createProduct());
   };
 
   return (
@@ -32,7 +51,11 @@ const ProductListScreen = ({ history, match }) => {
           <h1>Products</h1>
         </Col>
         <Col className="text-end">
-          <Button className="my-3" onClick={createProductHandler}>
+          <Button
+            className="my-3"
+            onClick={createProductHandler}
+            disabled={createLoading}
+          >
             <i className="fas fa-plus"></i> Create Product
           </Button>
         </Col>

@@ -8,6 +8,10 @@ const initialState = {
   error: null,
   deleteLoading: false,
   deleteError: null,
+  createdProduct: {},
+  createLoading: false,
+  createSuccess: false,
+  createError: null,
 };
 
 // async action for product fetching
@@ -38,10 +42,40 @@ export const deleteProduct = createAsyncThunk(
   }
 );
 
+export const createProduct = createAsyncThunk(
+  "products/createProduct",
+  async (id = null, { rejectWithValue, getState }) => {
+    const {
+      loginUser: { loginInfo },
+    } = getState();
+    try {
+      const { data } = await axios.post(
+        `/api/products`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${loginInfo.token}`,
+          },
+        }
+      );
+      return data;
+    } catch (err) {
+      return rejectWithValue(err.response.data.message);
+    }
+  }
+);
+
 const productSlice = createSlice({
   name: "products",
   initialState,
-  reducers: {},
+  reducers: {
+    clearCreatedProduct: (state, action) => {
+      state.createLoading = false;
+      state.createSuccess = false;
+      state.createdProduct = {};
+      state.createError = null;
+    },
+  },
   extraReducers: {
     [fetchProducts.pending]: (state, action) => {
       state.loading = true;
@@ -69,7 +103,25 @@ const productSlice = createSlice({
       state.deleteError = action.error.message;
       toast.error(action.error.message);
     },
+    [createProduct.pending]: (state, action) => {
+      state.createLoading = true;
+    },
+    [createProduct.fulfilled]: (state, action) => {
+      state.createLoading = false;
+      state.createSuccess = true;
+      state.products = [...state.products, action.payload];
+      state.createdProduct = action.payload;
+
+      toast.success("Product created!");
+    },
+    [createProduct.rejected]: (state, action) => {
+      state.createLoading = false;
+      state.createSuccess = false;
+      state.createError = action.error.message;
+      toast.error(action.error.message);
+    },
   },
 });
 
+export const { clearCreatedProduct } = productSlice.actions;
 export default productSlice.reducer;
