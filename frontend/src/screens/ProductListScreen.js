@@ -3,7 +3,7 @@ import { LinkContainer } from "react-router-bootstrap";
 import { Table, Button, Row, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 // import Paginate from "../components/Paginate";
-import { fetchProducts } from "../redux/reducers/productReducer";
+import { deleteProduct, fetchProducts } from "../redux/reducers/productReducer";
 import { Loader } from "../components/Loader";
 import Message from "../components/Message";
 
@@ -11,16 +11,14 @@ const ProductListScreen = ({ history, match }) => {
   const dispatch = useDispatch();
 
   const productList = useSelector((state) => state.productLists);
-  const { loading, error, products } = productList;
+  const { loading, error, products, deleteLoading } = productList;
 
   useEffect(() => {
     dispatch(fetchProducts());
   }, [dispatch]);
 
   const deleteHandler = (id) => {
-    // if (window.confirm('Are you sure')) {
-    //   dispatch(deleteProduct(id))
-    // }
+    dispatch(deleteProduct(id));
   };
 
   const createProductHandler = () => {
@@ -75,6 +73,7 @@ const ProductListScreen = ({ history, match }) => {
                       variant="danger"
                       className="btn-sm"
                       onClick={() => deleteHandler(product._id)}
+                      disabled={deleteLoading}
                     >
                       <i className="fas fa-trash"></i>
                     </Button>
