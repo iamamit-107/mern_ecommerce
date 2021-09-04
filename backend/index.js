@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require("path");
 const dotenv = require("dotenv");
 const products = require("./products");
 const connectDb = require("./config/db");
@@ -7,6 +8,7 @@ const connectDb = require("./config/db");
 const productRoutes = require("./routes/productRoutes");
 const userRoutes = require("./routes/userRoutes");
 const orderRoutes = require("./routes/orderRoutes");
+const uploadRoutes = require("./routes/uploadRoutes");
 
 // Middlewares
 const {
@@ -19,6 +21,9 @@ app.use(express.json());
 
 dotenv.config();
 
+// make upload folder static
+app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
+
 // Routers
 app.get("/", (req, res) => {
   res.send("Api is running..");
@@ -26,6 +31,7 @@ app.get("/", (req, res) => {
 app.use("/api/products", productRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/orders", orderRoutes);
+app.use("/api/upload", uploadRoutes);
 
 app.get("/api/config/paypal", (req, res) =>
   res.send(process.env.PAYPAL_CLIENT_ID)
