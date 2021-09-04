@@ -1,5 +1,4 @@
 const express = require("express");
-const path = require("path");
 const dotenv = require("dotenv");
 const products = require("./products");
 const connectDb = require("./config/db");
@@ -21,9 +20,6 @@ app.use(express.json());
 
 dotenv.config();
 
-// make upload folder static
-app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
-
 // Routers
 app.get("/", (req, res) => {
   res.send("Api is running..");
@@ -36,6 +32,9 @@ app.use("/api/upload", uploadRoutes);
 app.get("/api/config/paypal", (req, res) =>
   res.send(process.env.PAYPAL_CLIENT_ID)
 );
+
+// make upload folder static
+app.use("/uploads", express.static("uploads"));
 
 /**
  * @Error handler middlewares
