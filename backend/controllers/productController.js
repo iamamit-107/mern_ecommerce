@@ -93,10 +93,56 @@ const updateProductById = asyncHandler(async (req, res) => {
   }
 });
 
+/**
+ * @desc: post a review
+ * @route: POST api/products/:id/review
+ * @access: Private
+ */
+const addReview = asyncHandler(async (req, res) => {
+  const { rating, comment } = req.body;
+
+  const product = await Product.findById(req.params.id);
+
+  if (product) {
+    const alreadyReviewed = product.review.find(
+      (r) => r.user.toString() == req.user._id.toString()
+    );
+
+    if (alreadyReviewed) {
+      res.status(400);
+      throw new Error("Product already reviewed!");
+    } else {
+      try {
+        const review = {
+          name: req.user.name,
+          user: req.user._id,
+          rating: Number(rating),
+          comment,
+        };
+        product.review.push(review);
+
+        product.numReviews = product.review.length;
+        product.rating =
+          product.review.reduce((acc, item) => item.rating + acc, 0) /
+          product.review.length;
+
+        await product.save();
+        res.status(201).json({ message: "Review added!" });
+      } catch (error) {
+        res.status(400);
+        res.json({ message: "Something went wrong!" });
+      }
+    }
+  } else {
+    res.status(404);
+    throw new Error("Product not found");
+  }
+});
 module.exports = {
   addProducts,
   getProductById,
   getProducts,
   deleteProductById,
   updateProductById,
+  addReview,
 };
