@@ -21,6 +21,7 @@ import AdminProtectedRoutes from "./protectedRotes/AdminProtectedRoutes";
 import UserProtectedRoutes from "./protectedRotes/UserProtectedRoutes";
 import UserEditScreen from "./screens/UserEditScreen";
 import ProductListScreen from "./screens/ProductListScreen";
+import ProductEditScreen from "./screens/ProductEditScreen";
 
 function App() {
   return (
@@ -71,6 +72,11 @@ function App() {
             <AdminProtectedRoutes
               path="/admin/products"
               component={ProductListScreen}
+              exact
+            />
+            <AdminProtectedRoutes
+              path="/admin/product/:id/edit"
+              component={ProductEditScreen}
               exact
             />
           </Container>
