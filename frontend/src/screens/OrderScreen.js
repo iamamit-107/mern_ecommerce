@@ -5,7 +5,6 @@ import { PayPalButton } from "react-paypal-button-v2";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getOrderById,
-  resetOrder,
   resetPayOrder,
   resetSingleOrder,
   updatePay,
@@ -13,8 +12,9 @@ import {
 import { Loader } from "../components/Loader";
 import Message from "../components/Message";
 import axios from "axios";
+import { toast } from "react-toastify";
 
-const OrderScreen = () => {
+const OrderScreen = ({ history }) => {
   const { id } = useParams();
   const [sdkReady, setSdkReady] = useState(false);
   const dispatch = useDispatch();
@@ -28,6 +28,10 @@ const OrderScreen = () => {
     payOrderSuccess,
     payOrderLoading,
   } = useSelector((state) => state.orders);
+
+  const {
+    loginInfo: { isAdmin, token },
+  } = useSelector((state) => state.loginUser);
 
   useEffect(() => {
     const getPaypalSdkReady = async () => {
@@ -67,6 +71,27 @@ const OrderScreen = () => {
   if (error) {
     return <Message variant="danger">{error}</Message>;
   }
+
+  const handleDelivered = async () => {
+    try {
+      const { data } = await axios.put(
+        `/api/orders/${id}/delivered`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (data) {
+        toast.success("Delivered!");
+        history.push("/admin/orders");
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
 
   return (
     singleOrderSuccess && (
@@ -199,6 +224,16 @@ const OrderScreen = () => {
                         />
                       </Col>
                     </Row>
+                  </ListGroup.Item>
+                )}
+                {isAdmin && singleOrder.isPaid && !singleOrder.isDelivered && (
+                  <ListGroup.Item>
+                    <Button
+                      onClick={handleDelivered}
+                      className={`btn btn-block`}
+                    >
+                      Mark as Delivered
+                    </Button>
                   </ListGroup.Item>
                 )}
               </ListGroup>

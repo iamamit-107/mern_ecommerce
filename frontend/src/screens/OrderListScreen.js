@@ -6,9 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Loader } from "../components/Loader";
 import Message from "../components/Message";
 
-const OrderListScreen = ({ history }) => {
-  const dispatch = useDispatch();
-
+const OrderListScreen = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
