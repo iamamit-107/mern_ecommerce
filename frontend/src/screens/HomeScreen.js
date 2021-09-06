@@ -7,6 +7,7 @@ import { Loader } from "../components/Loader";
 import Message from "../components/Message";
 import { useParams } from "react-router";
 import Paginate from "../components/Paginate";
+import ProductCarousel from "../components/ProductCarousel";
 
 const HomeScreen = () => {
   const { keyword } = useParams();
@@ -30,6 +31,7 @@ const HomeScreen = () => {
 
   return (
     <Row>
+      {!keyword && <ProductCarousel />}
       {products.map((product) => (
         <Col key={product._id} sm={12} md={6} lg={3}>
           <Product product={product} />

@@ -14,6 +14,9 @@ const initialState = {
   createLoading: false,
   createSuccess: false,
   createError: null,
+  topProducts: [],
+  topLoading: false,
+  topError: null,
 };
 
 // async action for product fetching
@@ -24,6 +27,18 @@ export const fetchProducts = createAsyncThunk(
       `/api/products?keyword=${keyword}&pageNumber=${pageNumber}`
     );
     return data;
+  }
+);
+// async action for product fetching
+export const fetchTopProducts = createAsyncThunk(
+  "products/fetchTopProducts",
+  async (id = "", { rejectWithValue }) => {
+    try {
+      const { data } = await axios.get(`/api/products/top`);
+      return data;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
   }
 );
 
@@ -93,6 +108,17 @@ const productSlice = createSlice({
     [fetchProducts.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.error.message;
+    },
+    [fetchTopProducts.pending]: (state, action) => {
+      state.topLoading = true;
+    },
+    [fetchTopProducts.fulfilled]: (state, action) => {
+      state.topLoading = false;
+      state.topProducts = action.payload;
+    },
+    [fetchTopProducts.rejected]: (state, action) => {
+      state.topLoading = false;
+      state.topError = action.error.message;
     },
     [deleteProduct.pending]: (state, action) => {
       state.deleteLoading = true;

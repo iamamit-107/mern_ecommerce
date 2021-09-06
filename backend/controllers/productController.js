@@ -47,6 +47,22 @@ const addProducts = asyncHandler(async (req, res) => {
 });
 
 /**
+ * @desc: top product
+ * @route: GET api/products/top
+ * @access: Public
+ */
+const getTopProducts = asyncHandler(async (req, res) => {
+  const products = await Product.find({}).sort({ rating: -1 }).limit(3);
+
+  if (products) {
+    res.json(products);
+  } else {
+    res.status(400);
+    throw new Error("Server Error!");
+  }
+});
+
+/**
  * @desc: Fetch single product
  * @route: GET api/products/:id
  * @access: Public
@@ -161,4 +177,5 @@ module.exports = {
   deleteProductById,
   updateProductById,
   addReview,
+  getTopProducts,
 };
