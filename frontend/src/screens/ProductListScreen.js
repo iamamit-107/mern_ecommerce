@@ -11,13 +11,18 @@ import {
 } from "../redux/reducers/productReducer";
 import { Loader } from "../components/Loader";
 import Message from "../components/Message";
+import { useParams } from "react-router";
+import Paginate from "../components/Paginate";
 
-const ProductListScreen = ({ history, match }) => {
+const ProductListScreen = ({ history }) => {
+  const { pageNumber = 1 } = useParams();
   const dispatch = useDispatch();
 
   const productList = useSelector((state) => state.productLists);
   const {
     loading,
+    pages,
+    page,
     error,
     products,
     deleteLoading,
@@ -32,9 +37,9 @@ const ProductListScreen = ({ history, match }) => {
     if (createSuccess) {
       history.push(`/admin/product/${createdProduct._id}/edit`);
     } else {
-      dispatch(fetchProducts());
+      dispatch(fetchProducts({ pageNumber }));
     }
-  }, [dispatch, createSuccess]);
+  }, [dispatch, createSuccess, pageNumber]);
 
   const deleteHandler = (id) => {
     dispatch(deleteProduct(id));
@@ -105,7 +110,7 @@ const ProductListScreen = ({ history, match }) => {
               ))}
             </tbody>
           </Table>
-          {/* <Paginate pages={pages} page={page} isAdmin={true} /> */}
+          <Paginate pages={pages} page={page} isAdmin={true} />
         </>
       )}
     </>

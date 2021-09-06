@@ -6,17 +6,20 @@ import { useDispatch, useSelector } from "react-redux";
 import { Loader } from "../components/Loader";
 import Message from "../components/Message";
 import { useParams } from "react-router";
+import Paginate from "../components/Paginate";
 
 const HomeScreen = () => {
   const { keyword } = useParams();
+  const { pageNumber = 1 } = useParams();
+
   const dispath = useDispatch();
-  const { products, loading, error } = useSelector(
+  const { products, loading, error, pages, page } = useSelector(
     (state) => state.productLists
   );
 
   useEffect(() => {
-    dispath(fetchProducts(keyword));
-  }, [dispath, keyword]);
+    dispath(fetchProducts({ keyword, pageNumber }));
+  }, [dispath, keyword, pageNumber]);
 
   if (loading) {
     return <Loader />;
@@ -32,6 +35,8 @@ const HomeScreen = () => {
           <Product product={product} />
         </Col>
       ))}
+
+      <Paginate pages={pages} page={page} keyword={keyword ? keyword : ""} />
     </Row>
   );
 };

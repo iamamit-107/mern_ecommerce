@@ -4,6 +4,8 @@ import { toast } from "react-toastify";
 
 const initialState = {
   products: [],
+  page: null,
+  pages: null,
   loading: false,
   error: null,
   deleteLoading: false,
@@ -17,8 +19,10 @@ const initialState = {
 // async action for product fetching
 export const fetchProducts = createAsyncThunk(
   "products/fetchProducts",
-  async (keyword = "") => {
-    const { data } = await axios.get(`/api/products?keyword=${keyword}`);
+  async ({ keyword = "", pageNumber = "" }) => {
+    const { data } = await axios.get(
+      `/api/products?keyword=${keyword}&pageNumber=${pageNumber}`
+    );
     return data;
   }
 );
@@ -82,7 +86,9 @@ const productSlice = createSlice({
     },
     [fetchProducts.fulfilled]: (state, action) => {
       state.loading = false;
-      state.products = action.payload;
+      state.products = action.payload.products;
+      state.page = action.payload.page;
+      state.pages = action.payload.pages;
     },
     [fetchProducts.rejected]: (state, action) => {
       state.loading = false;

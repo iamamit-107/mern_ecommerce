@@ -33,6 +33,12 @@ function App() {
           <Container>
             <Route path="/" component={HomeScreen} exact />
             <Route path="/search/:keyword" component={HomeScreen} exact />
+            <Route
+              path="/search/:keyword/page/:pageNumber"
+              component={HomeScreen}
+              exact
+            />
+            <Route path="/page/:pageNumber" component={HomeScreen} exact />
             <Route path="/product/:id" component={ProductScreen} exact />
             <Route path="/cart" component={CartScreen} exact />
             <Route path="/login" component={LoginScreen} exact />
@@ -78,6 +84,11 @@ function App() {
             />
             <AdminProtectedRoutes
               path="/admin/products"
+              component={ProductListScreen}
+              exact
+            />
+            <AdminProtectedRoutes
+              path="/admin/products/:pageNumber"
               component={ProductListScreen}
               exact
             />
