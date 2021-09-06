@@ -9,6 +9,7 @@ import {
 import { Loader } from "../components/Loader";
 import Message from "../components/Message";
 import { getMyOrders } from "../redux/reducers/orderReducer";
+import Helmet from "react-helmet";
 
 const ProfileScreen = ({ location, history }) => {
   const [name, setName] = useState("");
@@ -49,109 +50,121 @@ const ProfileScreen = ({ location, history }) => {
   };
 
   return (
-    <Row>
-      <Col md={3}>
-        <h2>User Profile</h2>
-        {message && <Message variant="danger">{message}</Message>}
+    <>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Profile Page</title>
+      </Helmet>
+      <Row>
+        <Col md={3}>
+          <h2>User Profile</h2>
+          {message && <Message variant="danger">{message}</Message>}
 
-        {error ? (
-          <Message variant="danger">{error}</Message>
-        ) : (
-          <Form onSubmit={submitHandler}>
-            <Form.Group controlId="name" className="mb-3">
-              <Form.Label>Name</Form.Label>
-              <Form.Control
-                type="name"
-                placeholder="Enter name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="px-3"
-              ></Form.Control>
-            </Form.Group>
+          {error ? (
+            <Message variant="danger">{error}</Message>
+          ) : (
+            <Form onSubmit={submitHandler}>
+              <Form.Group controlId="name" className="mb-3">
+                <Form.Label>Name</Form.Label>
+                <Form.Control
+                  type="name"
+                  placeholder="Enter name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="px-3"
+                ></Form.Control>
+              </Form.Group>
 
-            <Form.Group controlId="email" className="mb-3">
-              <Form.Label>Email Address</Form.Label>
-              <Form.Control
-                type="email"
-                placeholder="Enter email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="px-3"
-              ></Form.Control>
-            </Form.Group>
+              <Form.Group controlId="email" className="mb-3">
+                <Form.Label>Email Address</Form.Label>
+                <Form.Control
+                  type="email"
+                  placeholder="Enter email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="px-3"
+                ></Form.Control>
+              </Form.Group>
 
-            <Form.Group controlId="password" className="mb-3">
-              <Form.Label>Password</Form.Label>
-              <Form.Control
-                type="password"
-                placeholder="Enter password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="px-3"
-              ></Form.Control>
-            </Form.Group>
+              <Form.Group controlId="password" className="mb-3">
+                <Form.Label>Password</Form.Label>
+                <Form.Control
+                  type="password"
+                  placeholder="Enter password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="px-3"
+                ></Form.Control>
+              </Form.Group>
 
-            <Button type="submit" variant="primary" disabled={loading}>
-              Update{" "}
-              {loading && (
-                <Spinner animation="border" role="status" size="sm" />
-              )}
-            </Button>
-          </Form>
-        )}
-      </Col>
-      <Col md={9}>
-        <h2>My Orders</h2>
-        {orderListLoading ? (
-          <Loader />
-        ) : orderListError ? (
-          <Message variant="danger">{orderListError}</Message>
-        ) : (
-          <Table striped bordered hover responsive className="table-sm">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>DATE</th>
-                <th>TOTAL</th>
-                <th>PAID</th>
-                <th>DELIVERED</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {orderLists.map((order) => (
-                <tr key={order._id}>
-                  <td>{order._id}</td>
-                  <td>{order.createdAt.substring(0, 10)}</td>
-                  <td>{order.totalPrice}</td>
-                  <td>
-                    {order.isPaid ? (
-                      order.paidAt.substring(0, 10)
-                    ) : (
-                      <i className="fas fa-times" style={{ color: "red" }}></i>
-                    )}
-                  </td>
-                  <td>
-                    {order.isDelivered ? (
-                      order.deliveredAt.substring(0, 10)
-                    ) : (
-                      <i className="fas fa-times" style={{ color: "red" }}></i>
-                    )}
-                  </td>
-                  <td>
-                    <LinkContainer to={`/order/${order._id}`}>
-                      <Button className="btn-sm" variant="light">
-                        Details
-                      </Button>
-                    </LinkContainer>
-                  </td>
+              <Button type="submit" variant="primary" disabled={loading}>
+                Update{" "}
+                {loading && (
+                  <Spinner animation="border" role="status" size="sm" />
+                )}
+              </Button>
+            </Form>
+          )}
+        </Col>
+        <Col md={9}>
+          <h2>My Orders</h2>
+          {orderListLoading ? (
+            <Loader />
+          ) : orderListError ? (
+            <Message variant="danger">{orderListError}</Message>
+          ) : (
+            <Table striped bordered hover responsive className="table-sm">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>DATE</th>
+                  <th>TOTAL</th>
+                  <th>PAID</th>
+                  <th>DELIVERED</th>
+                  <th></th>
                 </tr>
-              ))}
-            </tbody>
-          </Table>
-        )}
-      </Col>
-    </Row>
+              </thead>
+              <tbody>
+                {orderLists.map((order) => (
+                  <tr key={order._id}>
+                    <td>{order._id}</td>
+                    <td>{order.createdAt.substring(0, 10)}</td>
+                    <td>{order.totalPrice}</td>
+                    <td>
+                      {order.isPaid ? (
+                        order.paidAt.substring(0, 10)
+                      ) : (
+                        <i
+                          className="fas fa-times"
+                          style={{ color: "red" }}
+                        ></i>
+                      )}
+                    </td>
+                    <td>
+                      {order.isDelivered ? (
+                        order.deliveredAt.substring(0, 10)
+                      ) : (
+                        <i
+                          className="fas fa-times"
+                          style={{ color: "red" }}
+                        ></i>
+                      )}
+                    </td>
+                    <td>
+                      <LinkContainer to={`/order/${order._id}`}>
+                        <Button className="btn-sm" variant="light">
+                          Details
+                        </Button>
+                      </LinkContainer>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          )}
+        </Col>
+      </Row>
+    </>
   );
 };
 

@@ -13,6 +13,7 @@ import { Loader } from "../components/Loader";
 import Message from "../components/Message";
 import axios from "axios";
 import { toast } from "react-toastify";
+import Helmet from "react-helmet";
 
 const OrderScreen = ({ history }) => {
   const { id } = useParams();
@@ -96,6 +97,10 @@ const OrderScreen = ({ history }) => {
   return (
     singleOrderSuccess && (
       <>
+        <Helmet>
+          <meta charSet="utf-8" />
+          <title>Order Page</title>
+        </Helmet>
         <h1>Order {singleOrder._id}</h1>
 
         <Row>

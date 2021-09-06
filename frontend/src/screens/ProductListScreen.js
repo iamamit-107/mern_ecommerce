@@ -13,6 +13,7 @@ import { Loader } from "../components/Loader";
 import Message from "../components/Message";
 import { useParams } from "react-router";
 import Paginate from "../components/Paginate";
+import Helmet from "react-helmet";
 
 const ProductListScreen = ({ history }) => {
   const { pageNumber = 1 } = useParams();
@@ -51,6 +52,10 @@ const ProductListScreen = ({ history }) => {
 
   return (
     <>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Admin Product Lists</title>
+      </Helmet>
       <Row className="align-items-center">
         <Col>
           <h1>Products</h1>

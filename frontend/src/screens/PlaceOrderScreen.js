@@ -14,6 +14,7 @@ import Message from "../components/Message";
 import CheckoutSteps from "../components/CheckoutSteps";
 import { createOrder, resetOrder } from "../redux/reducers/orderReducer";
 import { resetCart } from "../redux/reducers/cartReducer";
+import Helmet from "react-helmet";
 
 const PlaceOrderScreen = ({ history }) => {
   const dispatch = useDispatch();
@@ -73,6 +74,10 @@ const PlaceOrderScreen = ({ history }) => {
 
   return (
     <>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Place Order</title>
+      </Helmet>
       <CheckoutSteps step1 step2 step3 step4 />
       <Row>
         <Col md={8}>

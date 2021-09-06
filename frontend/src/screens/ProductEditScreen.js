@@ -7,6 +7,7 @@ import { Message } from "../components/Message";
 import { Loader } from "../components/Loader";
 import FormContainer from "../components/FormContainer";
 import { toast } from "react-toastify";
+import Helmet from "react-helmet";
 
 const ProductEditScreen = ({ match, history }) => {
   const productId = match.params.id;
@@ -88,6 +89,10 @@ const ProductEditScreen = ({ match, history }) => {
 
   return (
     <>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Product Edit Page</title>
+      </Helmet>
       <Link to="/admin/productlist" className="btn btn-light my-3">
         Go Back
       </Link>

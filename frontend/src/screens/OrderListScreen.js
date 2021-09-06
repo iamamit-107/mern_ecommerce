@@ -5,6 +5,7 @@ import { Table, Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { Loader } from "../components/Loader";
 import Message from "../components/Message";
+import Helmet from "react-helmet";
 
 const OrderListScreen = () => {
   const [orders, setOrders] = useState([]);
@@ -38,6 +39,10 @@ const OrderListScreen = () => {
 
   return (
     <>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Order Lists</title>
+      </Helmet>
       <h1>Orders</h1>
       {loading ? (
         <Loader />

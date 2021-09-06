@@ -6,6 +6,7 @@ import { Loader } from "../components/Loader";
 import FormContainer from "../components/FormContainer";
 import axios from "axios";
 import { toast } from "react-toastify";
+import Helmet from "react-helmet";
 
 const UserEditScreen = ({ history }) => {
   const { id } = useParams();
@@ -63,6 +64,10 @@ const UserEditScreen = ({ history }) => {
 
   return (
     <>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Admin User edit</title>
+      </Helmet>
       <Link to="/admin/user-list" className="btn btn-light my-3">
         Go Back
       </Link>

@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { Col, Row } from "react-bootstrap";
+import { Helmet } from "react-helmet";
 import Product from "../components/Product";
 import { fetchProducts } from "../redux/reducers/productReducer";
 import { useDispatch, useSelector } from "react-redux";
@@ -30,16 +31,23 @@ const HomeScreen = () => {
   }
 
   return (
-    <Row>
-      {!keyword && <ProductCarousel />}
-      {products.map((product) => (
-        <Col key={product._id} sm={12} md={6} lg={3}>
-          <Product product={product} />
-        </Col>
-      ))}
+    <>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Welcome to Proshop</title>
+      </Helmet>
+      <Row>
+        {!keyword && <ProductCarousel />}
+        <h2 className="mt-5">Products</h2>
+        {products.map((product) => (
+          <Col key={product._id} sm={12} md={6} lg={3}>
+            <Product product={product} />
+          </Col>
+        ))}
 
-      <Paginate pages={pages} page={page} keyword={keyword ? keyword : ""} />
-    </Row>
+        <Paginate pages={pages} page={page} keyword={keyword ? keyword : ""} />
+      </Row>
+    </>
   );
 };
 

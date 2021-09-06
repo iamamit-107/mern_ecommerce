@@ -7,6 +7,7 @@ import { Loader } from "../components/Loader";
 import Message from "../components/Message";
 import axios from "axios";
 import { toast } from "react-toastify";
+import Helmet from "react-helmet";
 
 const UserListScreen = ({ history }) => {
   const dispatch = useDispatch();
@@ -40,6 +41,10 @@ const UserListScreen = ({ history }) => {
 
   return (
     <>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Admin User List</title>
+      </Helmet>
       <h1>Users</h1>
       {loading ? (
         <Loader />

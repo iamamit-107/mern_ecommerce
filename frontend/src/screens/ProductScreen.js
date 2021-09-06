@@ -17,6 +17,7 @@ import { addToCart } from "../redux/reducers/cartReducer";
 import { toast } from "react-toastify";
 import Message from "../components/Message";
 import axios from "axios";
+import Helmet from "react-helmet";
 
 const ProductScreen = () => {
   const [qty, setQty] = useState(1);
@@ -87,6 +88,10 @@ const ProductScreen = () => {
 
   return (
     <>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Product Details</title>
+      </Helmet>
       <Link to="/" className="btn btn-light my-3">
         Go Back
       </Link>

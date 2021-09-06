@@ -13,6 +13,7 @@ import Message from "../components/Message";
 import { toast } from "react-toastify";
 import { removeCart, updateCart } from "../redux/reducers/cartReducer";
 import { Link, useHistory } from "react-router-dom";
+import Helmet from "react-helmet";
 
 const CartScreen = () => {
   const { cart, success } = useSelector((state) => state.cartList);
@@ -39,6 +40,10 @@ const CartScreen = () => {
   };
   return (
     <div>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Cart</title>
+      </Helmet>
       <Row>
         <Col md={8}>
           {cart.length === 0 ? (
